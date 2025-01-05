@@ -53,7 +53,13 @@ app.post("/register", async (req, res) => {
 
             // login the user after it is created
             let token = jwt.sign({ email: email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' })
-            res.cookie("token", token)
+            // res.cookie("token", token)
+          res.cookie("token", token, {
+                      httpOnly: true,        // Prevent JavaScript access to the cookie
+                      secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
+                      sameSite: 'None',      // Required for cross-origin cookies
+                    });
+
 
             res.send("User created successfully.")
         })
@@ -68,7 +74,13 @@ app.post("/login", async (req, res) => {
     bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
             let token = jwt.sign({ email: user.email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' });
-            res.cookie("token", token);
+            // res.cookie("token", token);
+            res.cookie("token", token, {
+  httpOnly: true,        // Prevent JavaScript access to the cookie
+  secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
+  sameSite: 'None',      // Required for cross-origin cookies
+});
+
             res.status(200).send("Login successful.");
         } else {
             res.status(400).send("Something went wrong.");
@@ -225,6 +237,7 @@ app.get("/confirmpurchase/:id", isLoggedin, async (req,res) => {
 
 function isLoggedin(req, res, next) {
     const token = req.cookies.token;
+  console.log("Received token:", token); // this
 
     if (!token) {
         return res.status(401).send("You must be logged in.");
