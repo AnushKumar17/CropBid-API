@@ -54,7 +54,7 @@ app.post("/register", async (req, res) => {
             // login the user after it is created
             let token = jwt.sign({ email: email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' })
             // res.cookie("token", token)
-            res.cookie("token", token, {
+          res.cookie("token", token, {
                       httpOnly: true,        // Prevent JavaScript access to the cookie
                       secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
                       sameSite: 'None',      // Required for cross-origin cookies
@@ -76,10 +76,10 @@ app.post("/login", async (req, res) => {
             let token = jwt.sign({ email: user.email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' });
             // res.cookie("token", token);
             res.cookie("token", token, {
-            httpOnly: true,        // Prevent JavaScript access to the cookie
-            secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
-            sameSite: 'None',      // Required for cross-origin cookies
-          });
+  httpOnly: true,        // Prevent JavaScript access to the cookie
+  secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
+  sameSite: 'None',      // Required for cross-origin cookies
+});
 
             res.status(200).send("Login successful.");
         } else {
@@ -235,32 +235,9 @@ app.get("/confirmpurchase/:id", isLoggedin, async (req,res) => {
     }
 })
 
-// isLoggedin Middleware
 function isLoggedin(req, res, next) {
     const token = req.cookies.token;
-    console.log("Received token:", token); // Log the received token for debugging
-
-    if (!token) {
-        return res.status(401).send("You must be logged in.");
-    }
-
-    jwt.verify(token, process.env.MONGO_DB_SECRET, (err, data) => {
-        if (err) {
-            return res.status(401).send("Invalid token.");
-        }
-        req.user = data;
-        next();
-    });
-}
-
-app.get("/check-auth", isLoggedin, (req, res) => {
-    // If the token is valid, the request will pass through `isLoggedin`
-    res.status(200).send("User is authenticated");
-});
-
-
-function isLoggedin(req, res, next) {
-    const token = req.cookies.token;
+  console.log("Received token:", token); // this
 
     if (!token) {
         return res.status(401).send("You must be logged in.");
