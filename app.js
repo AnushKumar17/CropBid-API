@@ -88,10 +88,16 @@ app.post("/login", async (req, res) => {
     });
 });
 
+// app.post("/logout", isLoggedin, (req, res) => {
+//    res.cookie("token", "");
+//    res.status(200).send("Logout successful.");
+//});
+
 app.post("/logout", isLoggedin, (req, res) => {
-    res.cookie("token", "");
+    res.clearCookie("token");
     res.status(200).send("Logout successful.");
 });
+
 
 app.get("/profile", isLoggedin, async (req, res) => {
     try {
