@@ -235,11 +235,6 @@ app.get("/confirmpurchase/:id", isLoggedin, async (req,res) => {
     }
 })
 
-// Route to check if user is logged in
-app.get("/isloggedin", isLoggedin, (req, res) => {
-    res.status(200).send("User is logged in.");
-});
-
 
 function isLoggedin(req, res, next) {
     const token = req.cookies.token;
