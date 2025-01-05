@@ -235,8 +235,6 @@ app.get("/confirmpurchase/:id", isLoggedin, async (req,res) => {
     }
 })
 
-const jwt = require("jsonwebtoken");
-
 // isLoggedin Middleware
 function isLoggedin(req, res, next) {
     const token = req.cookies.token;
