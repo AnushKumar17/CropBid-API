@@ -52,7 +52,7 @@ app.post("/register", async (req, res) => {
             })
 
             // login the user after it is created
-            let token = jwt.sign({ email: email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' })
+            let token = jwt.sign({ email: email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '10m' })
             // res.cookie("token", token)
           res.cookie("token", token, {
                       httpOnly: true,        // Prevent JavaScript access to the cookie
@@ -73,7 +73,7 @@ app.post("/login", async (req, res) => {
 
     bcrypt.compare(password, user.password, (err, result) => {
         if (result) {
-            let token = jwt.sign({ email: user.email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' });
+            let token = jwt.sign({ email: user.email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '10m' });
             // res.cookie("token", token);
             res.cookie("token", token, {
             httpOnly: true,        // Prevent JavaScript access to the cookie
