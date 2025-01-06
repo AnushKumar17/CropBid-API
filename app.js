@@ -56,7 +56,8 @@ app.post("/register", async (req, res) => {
             // res.cookie("token", token)
           res.cookie("token", token, {
                       httpOnly: true,        // Prevent JavaScript access to the cookie
-                      secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
+                      secure : false,
+                      // secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
                       sameSite: 'None',      // Required for cross-origin cookies
                     });
 
@@ -76,9 +77,10 @@ app.post("/login", async (req, res) => {
             let token = jwt.sign({ email: user.email, userid: user._id }, process.env.MONGO_DB_SECRET, { expiresIn: '1h' });
             // res.cookie("token", token);
             res.cookie("token", token, {
-  httpOnly: true,        // Prevent JavaScript access to the cookie
-  secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
-  sameSite: 'None',      // Required for cross-origin cookies
+            httpOnly: true,        // Prevent JavaScript access to the cookie
+            secure : false,
+            // secure: process.env.NODE_ENV === 'production',  // Only use secure cookies in production (for HTTPS)
+            sameSite: 'None',      // Required for cross-origin cookies
 });
 
             res.status(200).send("Login successful.");
@@ -94,9 +96,19 @@ app.post("/login", async (req, res) => {
 //});
 
 app.post("/logout", isLoggedin, (req, res) => {
-    res.clearCookie("token");
+    // res.clearCookie("token");
+  res.clearCookie("token", {
+    httpOnly: true,
+    secure : false,
+    // secure: process.env.NODE_ENV === 'production',
+    sameSite: 'None',
+    path: '/', // Match the path used during login
+});
+
     res.status(200).send("Logout successful.");
 });
+
+
 
 
 app.get("/profile", isLoggedin, async (req, res) => {
